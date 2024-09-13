@@ -1418,6 +1418,23 @@ class DaemonSet(APIObject):
     namespaced = True
 
 
+    async def pods(self) -> list[Pod]:
+        """Return a list of Pods for this DaemonSet."""
+        assert self.api
+        pods = await self.api.async_get(
+            "pods",
+            label_selector=dict_to_selector(self.spec["selector"]["matchLabels"]),
+            namespace=self.namespace,
+        )
+        if isinstance(pods, Pod):
+            return [pods]
+        if isinstance(pods, list) and all(isinstance(pod, Pod) for pod in pods):
+            # The all(isinstance(...) for ...) check doesn't seem to narrow the type
+            # correctly in pyright so we need to explicitly use cast
+            return cast(list[Pod], pods)
+        raise TypeError(f"Unexpected type {type(pods)} returned from API")
+
+
 class Deployment(APIObject):
     """A Kubernetes Deployment."""
 
@@ -1467,6 +1484,23 @@ class ReplicaSet(APIObject):
     scalable = True
 
 
+    async def pods(self) -> list[Pod]:
+        """Return a list of Pods for this ReplicaSet."""
+        assert self.api
+        pods = await self.api.async_get(
+            "pods",
+            label_selector=dict_to_selector(self.spec["selector"]["matchLabels"]),
+            namespace=self.namespace,
+        )
+        if isinstance(pods, Pod):
+            return [pods]
+        if isinstance(pods, list) and all(isinstance(pod, Pod) for pod in pods):
+            # The all(isinstance(...) for ...) check doesn't seem to narrow the type
+            # correctly in pyright so we need to explicitly use cast
+            return cast(list[Pod], pods)
+        raise TypeError(f"Unexpected type {type(pods)} returned from API")
+
+
 class StatefulSet(APIObject):
     """A Kubernetes StatefulSet."""
 
@@ -1478,6 +1512,21 @@ class StatefulSet(APIObject):
     namespaced = True
     scalable = True
 
+    async def pods(self) -> list[Pod]:
+        """Return a list of Pods for this StatefulSet."""
+        assert self.api
+        pods = await self.api.async_get(
+            "pods",
+            label_selector=dict_to_selector(self.spec["selector"]["matchLabels"]),
+            namespace=self.namespace,
+        )
+        if isinstance(pods, Pod):
+            return [pods]
+        if isinstance(pods, list) and all(isinstance(pod, Pod) for pod in pods):
+            # The all(isinstance(...) for ...) check doesn't seem to narrow the type
+            # correctly in pyright so we need to explicitly use cast
+            return cast(list[Pod], pods)
+        raise TypeError(f"Unexpected type {type(pods)} returned from API")
 
 ## autoscaling/v1 objects
 
