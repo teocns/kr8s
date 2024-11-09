@@ -6,7 +6,7 @@ readme = "README.md"
 keywords = ["kubernetes", "kubectl"]
 license = { text = "BSD-3-Clause" }
 classifiers = ["Programming Language :: Python :: 3"]
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 dynamic = ["version"]
 dependencies = [
     "asyncache>=0.3.1",
@@ -130,7 +130,7 @@ line-length = 120
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Assume Python 3.10.
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
